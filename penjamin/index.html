@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Penjamin — Quit Smoking Weed</title>
+  <meta name="description" content="Penjamin helps you quit THC by tracking your clean streak, money saved, recovery milestones, and cravings — privately on your iPhone.">
+  <link rel="canonical" href="https://devinzander.github.io/the-prequel/penjamin/">
+  <meta property="og:title" content="Penjamin — Quit weed. Keep the proof.">
+  <meta property="og:description" content="Track every clean day, watch your savings grow, beat cravings. Private, on-device, no account.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://devinzander.github.io/the-prequel/penjamin/">
+  <meta property="og:image" content="https://devinzander.github.io/the-prequel/penjamin/og.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Penjamin — Quit weed. Keep the proof.">
+  <meta name="twitter:description" content="Private sobriety tracking for iPhone.">
+  <meta name="twitter:image" content="https://devinzander.github.io/the-prequel/penjamin/og.png">
+  <style>
+    :root {
+      --green: #2ecc71;
+      --green-dark: #27ae60;
+      --ink: #0d1117;
+      --ink2: #161b22;
+      --card: #1c2333;
+      --muted: #8b949e;
+      --soft: rgba(46,204,113,0.10);
+      --white: #f0f6fc;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+      background: var(--ink);
+      color: var(--white);
+      line-height: 1.6;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    /* NAV */
+    nav {
+      position: sticky; top: 0; z-index: 10;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 28px;
+      background: rgba(13,17,23,0.88);
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      backdrop-filter: blur(16px);
+    }
+    .nav-brand {
+      font-size: 1.08rem; font-weight: 800;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .nav-icon {
+      width: 34px; height: 34px; border-radius: 10px;
+      background: linear-gradient(135deg, var(--green), #1a7a42);
+      display: grid; place-items: center;
+      font-size: 1.1rem;
+    }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: 10px 20px; border-radius: 10px; font-weight: 700;
+      font-size: 0.95rem; transition: opacity 0.15s;
+    }
+    .btn:hover { opacity: 0.85; }
+    .btn-primary {
+      background: var(--green); color: #000;
+    }
+    .btn-outline {
+      border: 1.5px solid rgba(255,255,255,0.2); color: var(--white);
+    }
+
+    /* HERO */
+    .hero {
+      text-align: center;
+      padding: 90px 24px 80px;
+      background:
+        radial-gradient(ellipse 60% 40% at 50% -10%, rgba(46,204,113,0.18), transparent),
+        var(--ink);
+    }
+    .hero-eyebrow {
+      display: inline-block;
+      font-size: 0.82rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--green);
+      background: var(--soft); padding: 5px 14px; border-radius: 20px;
+      margin-bottom: 22px;
+    }
+    .hero h1 {
+      font-size: clamp(2.2rem, 5vw, 3.6rem);
+      font-weight: 900; line-height: 1.1;
+      margin-bottom: 18px; letter-spacing: -0.02em;
+    }
+    .hero h1 em { font-style: normal; color: var(--green); }
+    .hero-sub {
+      font-size: 1.12rem; color: var(--muted); max-width: 520px;
+      margin: 0 auto 36px;
+    }
+    .hero-ctas {
+      display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+      margin-bottom: 56px;
+    }
+    .app-store-btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--white); color: #000;
+      padding: 11px 22px; border-radius: 12px; font-weight: 700;
+      font-size: 0.95rem; transition: opacity 0.15s;
+    }
+    .app-store-btn:hover { opacity: 0.9; }
+    .app-store-btn svg { flex-shrink: 0; }
+
+    /* STATS */
+    .stats {
+      display: flex; justify-content: center; gap: 40px;
+      flex-wrap: wrap; margin-top: 8px;
+    }
+    .stat { text-align: center; }
+    .stat strong { display: block; font-size: 1.5rem; font-weight: 900; color: var(--green); }
+    .stat span { font-size: 0.82rem; color: var(--muted); }
+
+    /* FEATURES */
+    .section { padding: 80px 24px; max-width: 1000px; margin: 0 auto; }
+    .section-label {
+      font-size: 0.8rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--green); margin-bottom: 10px;
+    }
+    .section-title {
+      font-size: clamp(1.7rem, 3.5vw, 2.4rem);
+      font-weight: 900; letter-spacing: -0.02em; line-height: 1.15;
+      margin-bottom: 14px;
+    }
+    .section-sub { color: var(--muted); font-size: 1.05rem; max-width: 560px; margin-bottom: 48px; }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+    .feature-card {
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 16px; padding: 24px;
+    }
+    .feature-icon {
+      width: 44px; height: 44px; border-radius: 12px;
+      background: var(--soft);
+      display: grid; place-items: center;
+      font-size: 1.3rem; margin-bottom: 14px;
+    }
+    .feature-card h3 { font-size: 1rem; font-weight: 800; margin-bottom: 7px; }
+    .feature-card p { font-size: 0.9rem; color: var(--muted); line-height: 1.55; }
+
+    /* PRIVACY */
+    .privacy-section {
+      max-width: 1000px; margin: 0 auto;
+      padding: 60px 24px;
+    }
+    .privacy-card {
+      background: var(--soft);
+      border: 1px solid rgba(46,204,113,0.2);
+      border-radius: 20px; padding: 40px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px; align-items: center;
+    }
+    @media(max-width:640px){ .privacy-card { grid-template-columns: 1fr; } }
+    .privacy-card h2 {
+      font-size: 1.7rem; font-weight: 900; margin-bottom: 12px; letter-spacing: -0.02em;
+    }
+    .privacy-card p { color: var(--muted); margin-bottom: 16px; }
+    .privacy-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .privacy-list li {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 0.95rem; font-weight: 600;
+    }
+    .privacy-list li::before { content: "✓"; color: var(--green); font-weight: 900; }
+
+    /* PLUS */
+    .plus-section {
+      max-width: 1000px; margin: 0 auto; padding: 60px 24px;
+    }
+    .plus-card {
+      background: linear-gradient(135deg, #162a1e, #1c2333);
+      border: 1px solid rgba(46,204,113,0.25);
+      border-radius: 20px; padding: 48px 40px;
+      text-align: center;
+    }
+    .plus-badge {
+      display: inline-block;
+      font-size: 0.78rem; font-weight: 800; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--green);
+      background: var(--soft); padding: 4px 12px; border-radius: 20px;
+      margin-bottom: 16px;
+    }
+    .plus-card h2 { font-size: 2rem; font-weight: 900; margin-bottom: 12px; letter-spacing: -0.02em; }
+    .plus-card p { color: var(--muted); max-width: 480px; margin: 0 auto 32px; }
+    .plus-features {
+      display: flex; flex-wrap: wrap; gap: 12px; justify-content: center;
+      margin-bottom: 36px;
+    }
+    .plus-chip {
+      background: rgba(46,204,113,0.12);
+      border: 1px solid rgba(46,204,113,0.2);
+      border-radius: 20px; padding: 7px 16px;
+      font-size: 0.9rem; font-weight: 600;
+    }
+    .price-row {
+      display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-bottom: 24px;
+    }
+    .price-card {
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px; padding: 20px 24px; min-width: 140px; text-align: center;
+    }
+    .price-card.featured {
+      border-color: var(--green);
+      background: rgba(46,204,113,0.08);
+    }
+    .price-card .price { font-size: 1.5rem; font-weight: 900; }
+    .price-card .period { font-size: 0.82rem; color: var(--muted); }
+    .price-card .save {
+      font-size: 0.75rem; font-weight: 700;
+      color: var(--green); margin-top: 4px;
+    }
+    .disclaimer { font-size: 0.78rem; color: var(--muted); margin-top: 16px; }
+
+    /* CTA FOOTER */
+    .cta-section {
+      text-align: center; padding: 80px 24px;
+      background: radial-gradient(ellipse 60% 50% at 50% 110%, rgba(46,204,113,0.12), transparent);
+    }
+    .cta-section h2 { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 900; margin-bottom: 14px; letter-spacing: -0.02em; }
+    .cta-section p { color: var(--muted); margin-bottom: 32px; font-size: 1.05rem; }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid rgba(255,255,255,0.07);
+      padding: 28px 24px; text-align: center;
+      font-size: 0.83rem; color: var(--muted);
+      display: flex; flex-wrap: wrap; justify-content: center; gap: 16px;
+    }
+    footer a { color: var(--muted); }
+    footer a:hover { color: var(--white); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">
+    <div class="nav-icon">🌿</div>
+    Penjamin
+  </div>
+  <a class="btn btn-primary" href="https://apps.apple.com/app/id6783403205">Download free</a>
+</nav>
+
+<section class="hero">
+  <p class="hero-eyebrow">Free · iPhone · No account</p>
+  <h1>Quit weed with <em>proof</em><br>you can see.</h1>
+  <p class="hero-sub">Track every clean day, watch the money you're saving grow, beat cravings, and follow your recovery — all privately on your phone.</p>
+  <div class="hero-ctas">
+    <a class="app-store-btn" href="https://apps.apple.com/app/id6783403205">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+      Download on the App Store
+    </a>
+  </div>
+  <div class="stats">
+    <div class="stat"><strong>Day 1</strong><span>to 1 year milestones</span></div>
+    <div class="stat"><strong>Private</strong><span>no account or tracking</span></div>
+    <div class="stat"><strong>Free</strong><span>core tracker</span></div>
+  </div>
+</section>
+
+<section class="section" id="features">
+  <p class="section-label">What Penjamin does</p>
+  <h2 class="section-title">Everything you need<br>to actually quit.</h2>
+  <p class="section-sub">Quitting gets easier when you can see what you're getting back.</p>
+  <div class="feature-grid">
+    <div class="feature-card">
+      <div class="feature-icon">🔥</div>
+      <h3>Clean streak counter</h3>
+      <p>A live counter showing exactly how long you've been clean — days, hours, minutes, and seconds. Every moment counts.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">💰</div>
+      <h3>Money saved</h3>
+      <p>Enter what you used to spend each week and watch your savings grow in real time as your streak does.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🧠</div>
+      <h3>Beat cravings</h3>
+      <p>When an urge hits, open Penjamin. See your reasons for quitting. Wait it out. Log the craving when it passes.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🏆</div>
+      <h3>Recovery milestones</h3>
+      <p>Follow your recovery from 24 hours to one full year — and see what's happening in your body at each stage.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📱</div>
+      <h3>Home screen widget</h3>
+      <p>See your days clean at a glance, right from your home screen. Your streak always one tap away.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🔔</div>
+      <h3>Milestone reminders</h3>
+      <p>Get notified when you hit a new milestone. Small celebrations keep momentum going through the hard stretches.</p>
+    </div>
+  </div>
+</section>
+
+<div class="privacy-section">
+  <div class="privacy-card">
+    <div>
+      <h2>Private by design.</h2>
+      <p>Your quit journey is personal. Penjamin keeps it that way — everything lives on your phone and never leaves.</p>
+      <ul class="privacy-list">
+        <li>No account required</li>
+        <li>No ads, no tracking</li>
+        <li>No data collection</li>
+        <li>Delete the app, delete everything</li>
+      </ul>
+    </div>
+    <div style="text-align:center;">
+      <div style="font-size:5rem; line-height:1;">🔒</div>
+      <p style="color:var(--muted); font-size:0.9rem; margin-top:14px;">Your data never leaves your device.<br>Not to us, not to anyone.</p>
+    </div>
+  </div>
+</div>
+
+<section class="plus-section" id="plus">
+  <div class="plus-card">
+    <p class="plus-badge">Penjamin Plus</p>
+    <h2>Go deeper into your recovery.</h2>
+    <p>The core tracker is free forever. Plus unlocks the patterns and projections that help you understand where you've been — and where you're going.</p>
+    <div class="plus-features">
+      <span class="plus-chip">Savings projections</span>
+      <span class="plus-chip">Craving pattern charts</span>
+      <span class="plus-chip">Top triggers</span>
+      <span class="plus-chip">Mood trends</span>
+      <span class="plus-chip">Deeper recovery insights</span>
+    </div>
+    <div class="price-row">
+      <div class="price-card">
+        <div class="price">$7.99</div>
+        <div class="period">/ month</div>
+      </div>
+      <div class="price-card featured">
+        <div class="price">$29.99</div>
+        <div class="period">/ year</div>
+        <div class="save">7-day trial · Save 69%</div>
+      </div>
+    </div>
+    <a class="btn btn-primary" style="font-size:1rem; padding:14px 32px;" href="https://apps.apple.com/app/id6783403205">Start free</a>
+    <p class="disclaimer">Free tier included. No credit card to download.</p>
+  </div>
+</section>
+
+<section class="cta-section">
+  <h2>Start your clean streak today.</h2>
+  <p>One clean day is where every streak starts. Download Penjamin free and take the first one.</p>
+  <a class="app-store-btn" style="display:inline-flex;" href="https://apps.apple.com/app/id6783403205">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+    Download on the App Store
+  </a>
+</section>
+
+<footer>
+  <span>© 2026 Devin Zander</span>
+  <a href="https://devinzander.github.io/the-prequel/penjamin/privacy.html">Privacy Policy</a>
+  <a href="https://devinzander.github.io/the-prequel/penjamin/terms.html">Terms of Use</a>
+  <a href="mailto:devinzander@outlook.com">Contact</a>
+  <span>Penjamin is a self-help tool, not medical advice. If you're struggling, talk to a doctor.</span>
+</footer>
+
+</body>
+</html>

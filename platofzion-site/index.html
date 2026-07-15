@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plat of Zion — Every parcel in Utah</title>
+<meta name="description" content="A Utah parcel viewer. Tap any lot to see its boundary, owner of record, assessed value, zoning, and the officials who represent it — from Utah's public records, private by design. One purchase covers iPhone, iPad, and Mac.">
+<meta name="theme-color" content="#96432B">
+<meta property="og:title" content="Plat of Zion — Every parcel in Utah">
+<meta property="og:description" content="Tap any lot to see its boundary, owner of record, assessed value, zoning, and the officials who represent it. iPhone · iPad · Mac.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://platofzion.com">
+<meta property="og:image" content="https://platofzion.com/img/1_hero.png">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="favicon.svg">
+<style>
+  :root{
+    --paper:#f3ebe4; --paper-2:#faf6f1; --card:#fdfbf8;
+    --ink:#1b1712; --ink-soft:#5c5148; --hair:rgba(27,23,18,.12);
+    --accent:#96432b; --field:#3e6b4f;
+    --serif:"Iowan Old Style","Palatino Linotype","Book Antiqua",Palatino,Georgia,"Times New Roman",serif;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    margin:0; font-family:var(--sans); color:var(--ink); line-height:1.55;
+    background:linear-gradient(180deg,#f5ede6 0%,#efe2da 55%,#e8d6cd 100%) no-repeat;
+    min-height:100%;
+  }
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+  a{color:var(--accent)}
+  h1,h2,h3{font-family:var(--serif);font-weight:600;letter-spacing:-.01em;line-height:1.08;margin:0}
+  .kicker{font-family:var(--sans);font-size:.74rem;font-weight:700;letter-spacing:.19em;
+    text-transform:uppercase;color:var(--accent)}
+
+  /* header */
+  header{padding:26px 0 6px}
+  .brand{display:flex;align-items:center;gap:11px}
+  .glyph{width:30px;height:30px;flex:none}
+  .brand b{font-family:var(--serif);font-weight:600;font-size:1.12rem;letter-spacing:-.01em}
+  .brand span{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);margin-top:2px}
+
+  /* hero */
+  .hero{display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center;
+    padding:56px 0 40px}
+  .hero h1{font-size:clamp(2.6rem,6vw,4.3rem)}
+  .hero h1 em{font-style:normal;color:var(--accent)}
+  .lead{font-size:1.16rem;color:var(--ink-soft);max-width:34ch;margin:22px 0 0}
+  .cta{margin-top:30px;display:flex;flex-direction:column;gap:12px;align-items:flex-start}
+  .badge{display:inline-flex;align-items:center;gap:10px;background:var(--ink);color:#fff;
+    text-decoration:none;padding:13px 20px;border-radius:13px;font-weight:600;font-size:1rem}
+  .badge small{display:block;font-size:.68rem;font-weight:500;opacity:.72;letter-spacing:.02em}
+  .badge svg{width:22px;height:22px;flex:none}
+  .platforms{font-size:.92rem;color:var(--ink-soft)}
+  .platforms b{color:var(--ink);font-weight:600}
+
+  .shot{margin:0;justify-self:center;filter:drop-shadow(0 26px 44px rgba(58,32,20,.24))}
+  .shot img{display:block;width:min(300px,72vw);height:auto;border-radius:26px}
+
+  /* section */
+  section{padding:34px 0}
+  .band{border-top:1px solid var(--hair)}
+  .sec-head{max-width:52ch}
+  .sec-head h2{font-size:clamp(1.7rem,3.6vw,2.4rem);margin-top:10px}
+  .sec-head p{color:var(--ink-soft);font-size:1.05rem;margin:12px 0 0}
+
+  /* feature grid */
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:34px}
+  .feat{background:var(--card);border:1px solid var(--hair);border-radius:18px;padding:22px 20px}
+  .feat .n{font-family:var(--serif);font-size:1.05rem;color:var(--accent);
+    display:flex;align-items:baseline;gap:9px;margin-bottom:9px}
+  .feat .n i{font-style:normal;font-size:.8rem;color:var(--ink-soft);
+    font-family:var(--sans);letter-spacing:.08em}
+  .feat h3{font-size:1.22rem;margin-bottom:6px}
+  .feat p{margin:0;color:var(--ink-soft);font-size:.97rem}
+
+  /* ledger strip */
+  .ledger{background:var(--paper-2);border:1px solid var(--hair);border-radius:20px;
+    padding:30px;display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-top:8px}
+  .ledger .fig{font-family:var(--serif);font-weight:600;font-size:2.1rem;letter-spacing:-.01em}
+  .ledger .fig u{text-decoration:none;color:var(--ink-soft);font-size:1rem;margin-left:4px}
+  .ledger .lbl{font-size:.76rem;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--ink-soft);margin-top:4px}
+
+  /* gallery */
+  .gal{display:flex;gap:18px;overflow-x:auto;padding:32px 0 8px;scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch}
+  .gal figure{margin:0;flex:0 0 auto;scroll-snap-align:center}
+  .gal img{display:block;width:238px;height:auto;border-radius:20px;
+    box-shadow:0 16px 30px rgba(58,32,20,.18)}
+
+  /* footer / legal */
+  footer{border-top:1px solid var(--hair);margin-top:20px;padding:36px 0 54px}
+  .disc{background:rgba(150,67,43,.06);border:1px solid rgba(150,67,43,.18);
+    border-radius:14px;padding:16px 18px;color:var(--ink-soft);font-size:.9rem;max-width:64ch}
+  .foot-row{display:flex;flex-wrap:wrap;gap:8px 26px;align-items:center;margin-top:24px;
+    font-size:.92rem}
+  .foot-row a{text-decoration:none}
+  .foot-row a:hover{text-decoration:underline}
+  .foot-row .sp{color:var(--ink-soft);opacity:.5}
+  .copyright{color:var(--ink-soft);font-size:.85rem;margin-top:16px}
+
+  @media(max-width:820px){
+    .hero{grid-template-columns:1fr;gap:34px;padding:38px 0 20px;text-align:left}
+    .shot{order:-1}
+    .grid{grid-template-columns:1fr;gap:14px}
+    .ledger{grid-template-columns:1fr;gap:20px;text-align:center}
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <img class="glyph" src="favicon.svg" alt="Plat of Zion app icon">
+
+      <div>
+        <b>Plat of Zion</b><br>
+        <span>Utah parcel viewer</span>
+      </div>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div>
+      <p class="kicker">A Utah parcel viewer</p>
+      <h1 style="margin-top:14px">Every parcel<br>in <em>Utah.</em></h1>
+      <p class="lead">Tap any lot to see its boundary, owner of record, assessed value, zoning, and the officials who represent it — drawn live from Utah's own public records.</p>
+      <div class="cta">
+        <!-- When live, set href to the App Store product URL. -->
+        <a class="badge" href="#" aria-label="Coming soon to the App Store">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.365 1.43c0 1.14-.42 2.2-1.12 2.99-.77.87-2.02 1.53-3.06 1.45-.13-1.09.42-2.24 1.09-2.99.77-.87 2.11-1.51 3.09-1.45zM20.6 17.02c-.55 1.27-.82 1.83-1.53 2.95-.99 1.56-2.39 3.5-4.12 3.51-1.54.02-1.94-1.01-4.03-1-2.09.01-2.53 1.02-4.07 1-1.73-.02-3.05-1.78-4.04-3.34C-.06 17.9-.4 13.16 1.19 10.66c1.13-1.79 2.91-2.83 4.58-2.83 1.7 0 2.77 1.03 4.18 1.03 1.36 0 2.19-1.03 4.16-1.03 1.48 0 3.05.81 4.17 2.2-3.66 2-3.06 7.22.32 8.99z"/></svg>
+          <span>Coming soon<small>on the App Store</small></span>
+        </a>
+        <p class="platforms">One purchase covers <b>iPhone</b>, <b>iPad</b>, and <b>Mac</b>. No subscription, no ads.</p>
+      </div>
+    </div>
+    <figure class="shot">
+      <img src="img/2_detail.png" alt="Plat of Zion parcel detail: owner of record, deeded acreage, and assessor market value" loading="eager" width="285" height="620">
+    </figure>
+  </section>
+</div>
+
+<div class="band"><div class="wrap">
+  <section>
+    <div class="sec-head">
+      <p class="kicker">What it shows</p>
+      <h2>The public record, made legible.</h2>
+      <p>Utah publishes an enormous amount about every parcel — it's just scattered across county assessors, recorders, and state GIS services. Plat of Zion pulls it together into one tap.</p>
+    </div>
+    <div class="grid">
+      <div class="feat">
+        <div class="n">01 <i>STATEWIDE</i></div>
+        <h3>Every county</h3>
+        <p>Parcel boundaries for all 29 Utah counties, compiled from the Utah Geospatial Resource Center.</p>
+      </div>
+      <div class="feat">
+        <div class="n">02 <i>DEED</i></div>
+        <h3>Owner of record</h3>
+        <p>Who holds the parcel, wherever the county publishes it — Salt Lake and Utah counties today, more as they open their data.</p>
+      </div>
+      <div class="feat">
+        <div class="n">03 <i>ASSESSOR</i></div>
+        <h3>Acreage &amp; value</h3>
+        <p>Deeded area and assessor market value, set in a clean serif ledger — the numbers that actually matter, up front.</p>
+      </div>
+      <div class="feat">
+        <div class="n">04 <i>ZONING</i></div>
+        <h3>Zoning &amp; districts</h3>
+        <p>Zoning class plus the civic districts a lot sits in: legislative, school board, and voting precinct.</p>
+      </div>
+      <div class="feat">
+        <div class="n">05 <i>CIVICS</i></div>
+        <h3>Who represents it</h3>
+        <p>The current legislators and officials tied to each district, matched from a live public roster.</p>
+      </div>
+      <div class="feat">
+        <div class="n">06 <i>PRIVATE</i></div>
+        <h3>Private by design</h3>
+        <p>No accounts, no ads, no tracking. Your location is used on-device to center the map and never leaves your phone.</p>
+      </div>
+    </div>
+  </section>
+</div></div>
+
+<div class="band"><div class="wrap">
+  <section>
+    <div class="sec-head">
+      <p class="kicker">The signature view</p>
+      <h2>Tap a lot. Read the ledger.</h2>
+    </div>
+    <div class="ledger" role="img" aria-label="Example parcel: 9.72 deeded acres, $484,689,500 market value, tax-exempt government class">
+      <div>
+        <div class="fig">9.72<u>ac</u></div>
+        <div class="lbl">Deeded area</div>
+      </div>
+      <div>
+        <div class="fig">$484,689,500</div>
+        <div class="lbl">Assessor market value</div>
+      </div>
+      <div>
+        <div class="fig" style="color:var(--field)">Government</div>
+        <div class="lbl">Property class</div>
+      </div>
+    </div>
+    <div class="gal">
+      <figure><img src="img/1_hero.png" alt="Downtown Salt Lake City parcels on the map" loading="lazy"></figure>
+      <figure><img src="img/3_hybrid.png" alt="Parcels over a satellite hybrid map" loading="lazy"></figure>
+      <figure><img src="img/4_valley.png" alt="Parcel boundaries across a Utah valley" loading="lazy"></figure>
+      <figure><img src="img/5_south.png" alt="Parcels in southern Utah" loading="lazy"></figure>
+    </div>
+  </section>
+</div></div>
+
+<div class="wrap">
+  <footer>
+    <p class="disc"><b>A note on accuracy.</b> Boundaries are approximate and for reference only — they are not a survey and carry no legal weight. Assessor valuations are not appraisals. Verify anything important with the county recorder.</p>
+    <div class="foot-row">
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+      <a href="support.html">Support</a>
+      <span class="sp">·</span>
+      <a href="mailto:devin@zanderdevelopment.com">devin@zanderdevelopment.com</a>
+    </div>
+    <p class="copyright">© 2026 Zander Development. Not affiliated with any government agency. Parcel and civic data © their respective public providers.</p>
+  </footer>
+</div>
+
+</body>
+</html>

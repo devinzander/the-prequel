@@ -1,0 +1,11 @@
+{
+  // Static-assets-only Worker for platofzion.com.
+  // Build (Workers Builds) runs `npx wrangler deploy` from the repo root and
+  // publishes the ./platofzion-site folder as the site. No server code.
+  "name": "platofzion-site",
+  "compatibility_date": "2024-11-01",
+  "assets": {
+    "directory": "./platofzion-site",
+    "not_found_handling": "404-page"
+  }
+}

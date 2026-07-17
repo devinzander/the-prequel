@@ -18,11 +18,23 @@ font-weight:400 800;font-display:swap}
 body{background:var(--paper);color:var(--ink);font-family:var(--sans);min-height:100vh;
 display:flex;flex-direction:column;align-items:center;justify-content:center;
 padding:32px;text-align:center;gap:0}
-main{display:flex;flex-direction:column;align-items:center}
+main{display:flex;flex-direction:column;align-items:center;width:100%}
 .icon{width:min(240px,52vw);height:auto;margin-bottom:32px;
 border-radius:22.5%;box-shadow:0 18px 48px rgba(27,23,18,.18)}
-h1{font-family:"EB Garamond",var(--serif);font-size:clamp(40px,8vw,68px);font-weight:600;line-height:1.05;margin-bottom:18px}
-p{color:var(--ink-soft);font-size:18px}
+h1{font-family:"EB Garamond",var(--serif);font-size:clamp(40px,8vw,68px);font-weight:600;line-height:1.05;margin-bottom:14px}
+.sub{color:var(--ink-soft);font-size:18px;margin-bottom:34px}
+form{display:flex;gap:10px;width:100%;max-width:420px}
+input{flex:1;min-width:0;font-family:var(--sans);font-size:16px;color:var(--ink);
+padding:14px 16px;border:1px solid rgba(27,23,18,.18);border-radius:12px;
+background:#fff;-webkit-appearance:none;appearance:none}
+input:focus{outline:none;border-color:var(--accent)}
+button{font-family:var(--sans);font-size:16px;font-weight:600;color:#fff;
+background:var(--accent);border:none;border-radius:12px;padding:14px 22px;cursor:pointer;
+white-space:nowrap;transition:opacity .15s}
+button:disabled{opacity:.5;cursor:default}
+.done{color:var(--ink);font-size:17px;font-weight:600;min-height:52px;display:flex;
+align-items:center;justify-content:center}
+.err{color:var(--accent);font-size:14px;margin-top:10px;min-height:18px}
 footer{position:fixed;bottom:24px;left:0;right:0;
 color:var(--ink-soft);font-size:13px;letter-spacing:.3px}
 </style>
@@ -31,8 +43,45 @@ color:var(--ink-soft);font-size:13px;letter-spacing:.3px}
 <main>
   <img class="icon" src="/appicon.svg" alt="Plat of Zion app icon" width="240" height="240">
   <h1>Plat of Zion</h1>
-  <p>Coming soon</p>
+  <p class="sub">Coming soon</p>
+  <form id="notify" novalidate>
+    <input id="email" type="email" name="email" placeholder="Your email"
+           autocomplete="email" inputmode="email" required aria-label="Email address">
+    <button id="submit" type="submit">Notify me</button>
+  </form>
+  <p class="err" id="err" role="alert"></p>
 </main>
 <footer>© 2026 Zander Development LLC</footer>
+<script>
+const form = document.getElementById("notify");
+const email = document.getElementById("email");
+const submit = document.getElementById("submit");
+const err = document.getElementById("err");
+const ENDPOINT = "https://bvigvpcrmhvjnwqdcois.supabase.co/functions/v1/platofzion-notify";
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  err.textContent = "";
+  const value = email.value.trim();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value)) {
+    err.textContent = "Enter a valid email.";
+    return;
+  }
+  submit.disabled = true;
+  submit.textContent = "…";
+  try {
+    const res = await fetch(ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: value, source: "coming-soon" }),
+    });
+    if (!res.ok) throw new Error();
+    form.outerHTML = '<p class="done">You’re on the list — we’ll email you at launch.</p>';
+  } catch {
+    submit.disabled = false;
+    submit.textContent = "Notify me";
+    err.textContent = "Something went wrong. Try again.";
+  }
+});
+</script>
 </body>
 </html>

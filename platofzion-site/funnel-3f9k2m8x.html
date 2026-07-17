@@ -135,9 +135,21 @@ function render(data){
     <div class="foot">Anonymous aggregate · no identifiers · not linked, not tracking</div>`;
 }
 
+// The access key lives in the URL hash (#<key>) — never sent to a server as a
+// query on this page, and kept out of the Referer. Bookmark the full URL.
+const KEY = decodeURIComponent(location.hash.slice(1));
+
+function locked(msg){
+  document.getElementById("app").innerHTML =
+    `<div class="eyebrow">Plat of Zion</div><h1>Funnel</h1>
+     <div class="banner">${msg}</div>`;
+}
+
 async function load(){
+  if (!KEY) { locked("This dashboard is private. Open it with your access key in the URL (…/funnel-3f9k2m8x#YOUR-KEY)."); return; }
   try{
-    const r = await fetch(ENDPOINT, {cache: "no-store"});
+    const r = await fetch(ENDPOINT + "?key=" + encodeURIComponent(KEY), {cache: "no-store"});
+    if (r.status === 401) { locked("Access key not recognized. Check the key at the end of the URL."); return; }
     render(await r.json());
   }catch(e){
     document.getElementById("stamp").textContent = "Couldn't reach the data endpoint — retrying…";

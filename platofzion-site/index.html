@@ -3,14 +3,29 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Plat of Zion — Coming soon</title>
-<meta name="description" content="Plat of Zion. Coming soon.">
+<title>Plat of Zion — a Utah parcel viewer</title>
+<meta name="description" content="Plat of Zion — a Utah parcel viewer. Tap any lot for its boundary, owner of record, assessed value, and zoning. Coming soon.">
 <meta name="theme-color" content="#96432B">
+<link rel="canonical" href="https://platofzion.com/">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/favicon.svg">
+<!-- Open Graph / Twitter — how the link previews when shared, and what
+     web-crawling AI reads. Update copy when the app launches. -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Plat of Zion">
+<meta property="og:title" content="Plat of Zion — a Utah parcel viewer">
+<meta property="og:description" content="Tap any lot for its boundary, owner of record, assessed value, and zoning. Coming soon.">
+<meta property="og:url" content="https://platofzion.com/">
+<meta property="og:image" content="https://platofzion.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Plat of Zion app icon — a survey grid with the state of Utah">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Plat of Zion — a Utah parcel viewer">
+<meta name="twitter:description" content="Tap any lot for its boundary, owner of record, assessed value, and zoning. Coming soon.">
+<meta name="twitter:image" content="https://platofzion.com/og.png">
 <style>
-@font-face{font-family:"EB Garamond";src:url("/EBGaramond.ttf") format("truetype");
-font-weight:400 800;font-display:swap}
+@font-face{font-family:"EB Garamond";src:url("data:font/woff2;base64,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") format("woff2");font-weight:400 800;font-display:swap}
 :root{--paper:#f3ebe4;--ink:#1b1712;--ink-soft:#5c5148;--accent:#96432b;
 --serif:"Iowan Old Style","Palatino Linotype","Book Antiqua",Palatino,Georgia,"Times New Roman",serif;
 --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
@@ -72,7 +87,7 @@ footer{margin-top:40px;color:var(--ink-soft);font-size:13px;letter-spacing:.3px}
   </form>
   <p class="err" id="err" role="alert"></p>
 </main>
-<footer>© 2026 Zander Development LLC</footer>
+<footer>© 2026 Plat of Zion LLC</footer>
 <script>
 const form = document.getElementById("notify");
 const email = document.getElementById("email");

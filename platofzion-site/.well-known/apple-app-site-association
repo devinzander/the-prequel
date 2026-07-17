@@ -1,0 +1,13 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appIDs": ["9RB98R5588.com.platofzion"],
+        "components": [
+          { "/": "/parcel*" }
+        ]
+      }
+    ]
+  }
+}

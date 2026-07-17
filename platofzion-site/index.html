@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Plat of Zion — Coming soon</title>
-<meta name="description" content="Plat of Zion — every parcel in Utah. Coming soon.">
+<meta name="description" content="Plat of Zion. Coming soon.">
 <meta name="theme-color" content="#96432B">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/favicon.svg">
@@ -14,17 +14,23 @@
 --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
 *{margin:0;box-sizing:border-box}
 body{background:var(--paper);color:var(--ink);font-family:var(--sans);min-height:100vh;
-display:flex;align-items:center;justify-content:center;padding:32px;text-align:center}
-.kicker{font-size:13px;letter-spacing:3px;color:var(--accent);font-weight:600;margin-bottom:16px}
-h1{font-family:var(--serif);font-size:clamp(38px,8vw,64px);font-weight:600;line-height:1.1;margin-bottom:18px}
+display:flex;flex-direction:column;align-items:center;justify-content:center;
+padding:32px;text-align:center;gap:0}
+main{display:flex;flex-direction:column;align-items:center}
+.icon{width:min(240px,52vw);height:auto;margin-bottom:32px;
+border-radius:22.5%;box-shadow:0 18px 48px rgba(27,23,18,.18)}
+h1{font-family:var(--serif);font-size:clamp(40px,8vw,68px);font-weight:600;line-height:1.05;margin-bottom:18px}
 p{color:var(--ink-soft);font-size:18px}
+footer{position:fixed;bottom:24px;left:0;right:0;
+color:var(--ink-soft);font-size:13px;letter-spacing:.3px}
 </style>
 </head>
 <body>
 <main>
-  <div class="kicker">EVERY PARCEL IN UTAH</div>
+  <img class="icon" src="/appicon.svg" alt="Plat of Zion app icon" width="240" height="240">
   <h1>Plat of Zion</h1>
   <p>Coming soon.</p>
 </main>
+<footer>© 2026 Zander Development LLC</footer>
 </body>
 </html>

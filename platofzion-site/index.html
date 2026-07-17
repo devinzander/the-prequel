@@ -28,6 +28,8 @@ input{flex:1;min-width:0;font-family:var(--sans);font-size:16px;color:var(--ink)
 padding:14px 20px;border:1px solid rgba(27,23,18,.18);border-radius:999px;
 background:#fff;-webkit-appearance:none;appearance:none}
 input:focus{outline:none;border-color:var(--accent)}
+input.invalid{text-align:center;border-color:var(--accent)}
+input.invalid::placeholder{color:var(--accent);opacity:1}
 button{font-family:var(--sans);font-size:16px;font-weight:600;color:#fff;
 background:var(--accent);border:none;border-radius:999px;padding:14px 26px;cursor:pointer;
 white-space:nowrap;transition:opacity .15s}
@@ -57,12 +59,19 @@ const email = document.getElementById("email");
 const submit = document.getElementById("submit");
 const err = document.getElementById("err");
 const ENDPOINT = "https://bvigvpcrmhvjnwqdcois.supabase.co/functions/v1/platofzion-notify";
+email.addEventListener("input", () => {
+  email.classList.remove("invalid");
+  email.placeholder = "Your email";
+});
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
   err.textContent = "";
   const value = email.value.trim();
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value)) {
-    err.textContent = "Enter a valid email";
+    // Show the prompt inside the field itself, centered.
+    email.value = "";
+    email.placeholder = "Enter a valid email";
+    email.classList.add("invalid");
     return;
   }
   submit.disabled = true;

@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Plat of Zion · Funnel</title>
+<style>
+  :root{--paper:#f4ece3;--card:#faf5ee;--ink:#23201d;--muted:#847a6f;--accent:#96432b;
+        --rule:rgba(35,32,29,.12);--track:rgba(150,67,43,.10)}
+  @media (prefers-color-scheme:dark){:root{--paper:#1a1613;--card:#221d19;--ink:#ece4d9;
+        --muted:#9a8f83;--accent:#cf6a43;--rule:rgba(236,228,217,.14);--track:rgba(207,106,67,.16)}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);
+       font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+       -webkit-font-smoothing:antialiased}
+  .wrap{max-width:640px;margin:0 auto;padding:40px 22px 64px}
+  .eyebrow{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);font-weight:600}
+  h1{font:600 40px/1.05 "Iowan Old Style",Palatino,Georgia,serif;margin:.15em 0 .1em}
+  .stamp{color:var(--muted);font-size:12.5px}
+  .banner{margin:22px 0 0;padding:13px 15px;border:1px solid var(--rule);border-radius:10px;
+          background:var(--card);color:var(--muted);font-size:13px;line-height:1.45}
+  section{margin-top:36px}
+  h2{font:600 13px/1 -apple-system,sans-serif;letter-spacing:.14em;text-transform:uppercase;
+     color:var(--muted);margin:0 0 4px;padding-bottom:9px;border-bottom:1px solid var(--rule)}
+  .headline{display:flex;align-items:baseline;gap:10px;margin:14px 0 2px}
+  .headline .big{font:600 34px/1 "Iowan Old Style",Palatino,Georgia,serif}
+  .headline .sub{color:var(--muted);font-size:13px}
+  .frow{display:grid;grid-template-columns:1fr 120px 62px;align-items:center;gap:14px;padding:9px 0}
+  .flabel{font-weight:500}
+  .fnote{display:block;color:var(--muted);font-weight:400;font-size:12px;margin-top:1px}
+  .track{height:9px;border-radius:5px;background:var(--track);overflow:hidden}
+  .fill{height:100%;background:var(--accent);border-radius:5px}
+  .fill.muted{opacity:.55}
+  .fnum{font:600 20px/1 "Iowan Old Style",Palatino,Georgia,serif;text-align:right}
+  .pill{display:inline-block;margin:8px 8px 0 0;padding:6px 11px;border:1px solid var(--rule);
+        border-radius:999px;background:var(--card);font-size:13px}
+  .pill b{font-weight:600}.pill em{color:var(--muted);font-style:normal}
+  .empty{color:var(--muted);font-size:13px}
+  table{width:100%;border-collapse:collapse;margin-top:12px;font-size:13.5px}
+  th{text-align:right;color:var(--muted);font-weight:500;font-size:11px;letter-spacing:.08em;
+     text-transform:uppercase;padding:0 0 7px}
+  th:first-child{text-align:left}
+  td{padding:6px 0;border-top:1px solid var(--rule)}
+  .tn{text-align:right;font-variant-numeric:tabular-nums}
+  .tn.accent{color:var(--accent);font-weight:600}
+  .foot{margin-top:40px;color:var(--muted);font-size:12px;text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap" id="app">
+  <div class="eyebrow">Plat of Zion</div>
+  <h1>Funnel</h1>
+  <div class="stamp" id="stamp">Loading…</div>
+</div>
+
+<script>
+const ENDPOINT = "https://bvigvpcrmhvjnwqdcois.supabase.co/functions/v1/platofzion-events";
+
+const esc = s => String(s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+const rate = (a, b) => b > 0 ? Math.round(a / b * 100) + "%" : "—";
+const bar = (n, max, muted) => {
+  const w = max > 0 ? Math.max(n > 0 ? 2 : 0, Math.round(n / max * 100)) : 0;
+  return `<div class="track"><div class="fill${muted ? " muted" : ""}" style="width:${w}%"></div></div>`;
+};
+const frow = (label, note, n, max, muted) =>
+  `<div class="frow"><div class="flabel">${esc(label)}${note ? `<span class="fnote">${esc(note)}</span>` : ""}</div>
+   <div>${bar(n, max, muted)}</div><div class="fnum">${n.toLocaleString()}</div></div>`;
+
+function render(data){
+  const E = {}; (data.events||[]).forEach(r => E[r.event] = r.n);
+  const g = k => E[k] || 0;
+  const total = (data.events||[]).reduce((s, r) => s + r.n, 0);
+  const shown = g("paywall_shown"), tap = g("subscribe_tap"), sub = g("subscribe_success");
+  const complete = g("onboard_complete"), skip = g("onboard_skip");
+
+  const subs = (data.subs||[]).length
+    ? data.subs.map(r => {
+        const plan = r.plan ? r.plan[0].toUpperCase() + r.plan.slice(1) : "Unknown";
+        return `<span class="pill"><b>${r.n}</b> ${esc(plan)} <em>${r.trial ? "on trial" : "direct"}</em></span>`;
+      }).join("")
+    : `<span class="empty">No subscriptions yet</span>`;
+
+  const feats = [["bookmark_add","Bookmarks"],["share_record","Record shares"],
+    ["share_assembly","Assembly shares"],["measure_on","Lot-line measures"],
+    ["contact_save","Owners saved to Contacts"]];
+  const fmax = Math.max(1, ...feats.map(([k]) => g(k)));
+
+  const devs = (data.devices||[]).filter(d => d.device);
+  const devLine = devs.length
+    ? devs.map(d => `<span class="pill"><b>${d.n}</b> ${esc(d.device)}</span>`).join("")
+    : `<span class="empty">—</span>`;
+
+  const days = {};
+  (data.byDay||[]).forEach(r => {
+    (days[r.day] = days[r.day] || {s:0,t:0,b:0});
+    if (r.event === "paywall_shown") days[r.day].s = r.n;
+    if (r.event === "subscribe_tap") days[r.day].t = r.n;
+    if (r.event === "subscribe_success") days[r.day].b = r.n;
+  });
+  const dk = Object.keys(days).sort().reverse();
+  const trend = dk.length
+    ? dk.map(d => `<tr><td>${d}</td><td class="tn">${days[d].s||"—"}</td>
+        <td class="tn">${days[d].t||"—"}</td><td class="tn accent">${days[d].b||"—"}</td></tr>`).join("")
+    : `<tr><td colspan="4" class="empty">No activity in the last 14 days</td></tr>`;
+
+  const stamp = new Date().toLocaleString();
+  const banner = total === 0
+    ? `<div class="banner">No events yet — this fills in once a build with analytics is live in the App Store.
+       The structure below is what you'll see. (Dev &amp; TestFlight runs are suppressed on purpose.)</div>` : "";
+
+  document.getElementById("app").innerHTML = `
+    <div class="eyebrow">Plat of Zion</div><h1>Funnel</h1>
+    <div class="stamp">${total.toLocaleString()} events · updated ${stamp} · auto-refreshes</div>
+    ${banner}
+    <section><h2>Conversion</h2>
+      ${frow("Paywall shown","A free user hit the record gate",shown,shown,false)}
+      ${frow("Subscribe tapped",rate(tap,shown)+" of shown",tap,shown,false)}
+      ${frow("Subscribed",rate(sub,tap)+" of taps",sub,shown,false)}
+      <div class="headline"><span class="big">${rate(sub,shown)}</span>
+        <span class="sub">of gate-hits end up subscribing</span></div>
+    </section>
+    <section><h2>Subscriptions</h2><div>${subs}</div></section>
+    <section><h2>Onboarding</h2>
+      <div class="headline"><span class="big">${rate(complete,complete+skip)}</span>
+        <span class="sub">complete it · ${complete.toLocaleString()} done, ${skip.toLocaleString()} skipped</span></div>
+    </section>
+    <section><h2>What gets used</h2>
+      ${feats.map(([k,l]) => frow(l,"",g(k),fmax,true)).join("")}
+    </section>
+    <section><h2>Who</h2><div>${devLine}</div></section>
+    <section><h2>Last 14 days</h2>
+      <table><tr><th>Day</th><th>Shown</th><th>Tapped</th><th>Subscribed</th></tr>${trend}</table>
+    </section>
+    <div class="foot">Anonymous aggregate · no identifiers · not linked, not tracking</div>`;
+}
+
+async function load(){
+  try{
+    const r = await fetch(ENDPOINT, {cache: "no-store"});
+    render(await r.json());
+  }catch(e){
+    document.getElementById("stamp").textContent = "Couldn't reach the data endpoint — retrying…";
+  }
+}
+load();
+setInterval(load, 90000);
+</script>
+</body>
+</html>

@@ -62,7 +62,7 @@ form.addEventListener("submit", async (e) => {
   err.textContent = "";
   const value = email.value.trim();
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value)) {
-    err.textContent = "Enter a valid email.";
+    err.textContent = "Enter a valid email";
     return;
   }
   submit.disabled = true;
@@ -78,7 +78,7 @@ form.addEventListener("submit", async (e) => {
   } catch {
     submit.disabled = false;
     submit.textContent = "Notify";
-    err.textContent = "Something went wrong. Try again.";
+    err.textContent = "Something went wrong — try again";
   }
 });
 </script>

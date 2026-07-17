@@ -4,6 +4,7 @@
   // publishes the ./platofzion-site folder as the site. No server code.
   "name": "platofzion-site",
   "compatibility_date": "2024-11-01",
+  "routes": [{ "pattern": "platofzion.com", "custom_domain": true }],
   "assets": {
     "directory": "./platofzion-site",
     "not_found_handling": "404-page"

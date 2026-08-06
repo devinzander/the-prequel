@@ -6,10 +6,13 @@
 <meta name="robots" content="noindex,nofollow">
 <title>Plat of Zion · Funnel</title>
 <style>
+  /* One clay everywhere: --accent is the app's brand clay, and the dark
+     variant is the SAME hue lifted for dark paper — not a different orange.
+     Every orange on the page derives from these two variables. */
   :root{--paper:#f4ece3;--card:#faf5ee;--ink:#23201d;--muted:#847a6f;--accent:#96432b;
-        --rule:rgba(35,32,29,.12);--track:rgba(150,67,43,.10)}
+        --rule:rgba(35,32,29,.12);--track:rgba(150,67,43,.12)}
   @media (prefers-color-scheme:dark){:root{--paper:#1a1613;--card:#221d19;--ink:#ece4d9;
-        --muted:#9a8f83;--accent:#cf6a43;--rule:rgba(236,228,217,.14);--track:rgba(207,106,67,.16)}}
+        --muted:#9a8f83;--accent:#c8714f;--rule:rgba(236,228,217,.14);--track:rgba(200,113,79,.14)}}
   *{box-sizing:border-box}
   body{margin:0;background:var(--paper);color:var(--ink);
        font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
@@ -31,7 +34,6 @@
   .fnote{display:block;color:var(--muted);font-weight:400;font-size:12px;margin-top:1px}
   .track{height:9px;border-radius:5px;background:var(--track);overflow:hidden}
   .fill{height:100%;background:var(--accent);border-radius:5px}
-  .fill.muted{opacity:.55}
   .fnum{font:600 20px/1 "Iowan Old Style",Palatino,Georgia,serif;text-align:right}
   .pill{display:inline-block;margin:8px 8px 0 0;padding:6px 11px;border:1px solid var(--rule);
         border-radius:999px;background:var(--card);font-size:13px}
@@ -56,6 +58,7 @@
 
 <script>
 const ENDPOINT = "https://bvigvpcrmhvjnwqdcois.supabase.co/functions/v1/platofzion-events";
+const ONBOARD  = "https://bvigvpcrmhvjnwqdcois.supabase.co/functions/v1/platofzion-onboard";
 
 const esc = s => String(s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
 const rate = (a, b) => b > 0 ? Math.round(a / b * 100) + "%" : "—";
@@ -67,7 +70,7 @@ const frow = (label, note, n, max, muted) =>
   `<div class="frow"><div class="flabel">${esc(label)}${note ? `<span class="fnote">${esc(note)}</span>` : ""}</div>
    <div>${bar(n, max, muted)}</div><div class="fnum">${n.toLocaleString()}</div></div>`;
 
-function render(data){
+function render(data, audience){
   const E = {}; (data.events||[]).forEach(r => E[r.event] = r.n);
   const g = k => E[k] || 0;
   const total = (data.events||[]).reduce((s, r) => s + r.n, 0);
@@ -85,6 +88,22 @@ function render(data){
     ["share_assembly","Assembly shares"],["measure_on","Lot-line measures"],
     ["contact_save","Owners saved to Contacts"]];
   const fmax = Math.max(1, ...feats.map(([k]) => g(k)));
+
+  const aud = audience || {};
+  const profs = (aud.professions||[]).filter(p => p.profession);
+  const foci  = (aud.focus||[]).filter(f => f.focus);
+  const pmax  = Math.max(1, ...profs.map(p => p.n));
+  const fomax = Math.max(1, ...foci.map(f => f.n));
+  const audienceHTML = (profs.length || foci.length)
+    ? `<section><h2>Who they are</h2>
+         ${profs.length ? profs.map(p => frow(p.profession, "", p.n, pmax, false)).join("")
+                        : `<span class="empty">No answers yet</span>`}
+       </section>
+       <section><h2>What they came for</h2>
+         ${foci.length ? foci.map(f => frow(f.focus, "", f.n, fomax, true)).join("")
+                       : `<span class="empty">No answers yet</span>`}
+       </section>`
+    : "";
 
   const devs = (data.devices||[]).filter(d => d.device);
   const devLine = devs.length
@@ -125,6 +144,7 @@ function render(data){
       <div class="headline"><span class="big">${rate(complete,complete+skip)}</span>
         <span class="sub">complete it · ${complete.toLocaleString()} done, ${skip.toLocaleString()} skipped</span></div>
     </section>
+    ${audienceHTML}
     <section><h2>What gets used</h2>
       ${feats.map(([k,l]) => frow(l,"",g(k),fmax,true)).join("")}
     </section>
@@ -148,9 +168,14 @@ function locked(msg){
 async function load(){
   if (!KEY) { locked("This dashboard is private. Open it with your access key in the URL (…/funnel-3f9k2m8x#YOUR-KEY)."); return; }
   try{
-    const r = await fetch(ENDPOINT + "?key=" + encodeURIComponent(KEY), {cache: "no-store"});
+    const q = "?key=" + encodeURIComponent(KEY);
+    const [r, ra] = await Promise.all([
+      fetch(ENDPOINT + q, {cache: "no-store"}),
+      fetch(ONBOARD + q, {cache: "no-store"}).catch(() => null),
+    ]);
     if (r.status === 401) { locked("Access key not recognized. Check the key at the end of the URL."); return; }
-    render(await r.json());
+    const audience = ra && ra.ok ? await ra.json().catch(() => null) : null;
+    render(await r.json(), audience);
   }catch(e){
     document.getElementById("stamp").textContent = "Couldn't reach the data endpoint — retrying…";
   }
